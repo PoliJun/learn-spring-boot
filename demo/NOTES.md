@@ -56,3 +56,9 @@ public class DemoApplication {
 ## API Layer
 
 This is Controller
+
+## Service Layer
+
+### Constructor dependency injection
+
+Controller communicate with Service through this way
