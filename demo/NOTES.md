@@ -44,3 +44,9 @@ public class DemoApplication {
 
 }
 ```
+
+## Student Class
+
+- RESTful api  response json to browser automate.
+- toString method in Student class
+    > lombok: `@toString`
