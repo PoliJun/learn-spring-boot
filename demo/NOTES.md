@@ -1,8 +1,10 @@
 # Project Notes
 
-## Structure
+## Directory Structure
 
 ### pom.xml
+
+Maven file
 
 ### `@SpringBootApplication`
 
@@ -47,6 +49,10 @@ public class DemoApplication {
 
 ## Student Class
 
-- RESTful api  response json to browser automate.
-- toString method in Student class
+-   RESTful api response json to browser automate.
+-   toString method in Student class
     > lombok: `@toString`
+
+## API Layer
+
+This is Controller
