@@ -325,6 +325,10 @@ Indexes:
 
 ## Business Logic
 
+### FindStudentByEmail(String email)
+
+`Optional<Student> findStudentByEmail(String email);`
+
 ### `Optional<Student>`
 
 `isPresent()`
@@ -359,3 +363,24 @@ public class StudentService {
 }
 ```
 
+### Testing Post
+
+#### error message
+
+`application.properties`
+
+```properties
+server.error.include-message=always
+```
+
+returns:
+
+```json
+{
+    "timestamp": "2024-02-06T15:19:12.872+00:00",
+    "status": 500,
+    "error": "Internal Server Error",
+    "message": "Email already taken",
+    "path": "/api/v1/student"
+}
+```
