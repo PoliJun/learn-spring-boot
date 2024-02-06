@@ -426,3 +426,35 @@ update database
 - `mvn install`
 - `java -jar demo-0.0.1-SNAPSHOT.jar`  
 - `java -jar demo-0.0.1-SNAPSHOT.jar --server.port 8081`
+
+### `mvn package` vs. `mvn install`
+
+----
+**Bard:**
+
+<div style="margin: 5px; padding: 20px; border: 1px solid purple">
+**Tailoring Project Outputs: Understanding `mvn package` vs. `mvn install`**
+
+In the realm of Maven builds, both `mvn package` and `mvn install` play crucial roles, each catering to distinct deployment scenarios. Choosing the right command depends on your specific project objectives and desired outcomes.
+
+**mvn package:**
+
+- **Focus:** Packaged Artifact
+- **Action:** Compiles and packages your project into a distributable format (JAR/WAR), placing it within the dedicated `target` directory.
+- **Outcome:** Standalone distributable ready for manual deployment or testing.
+- **Suitability:** Ideal when you solely require a distributable package for immediate use without impacting your local Maven repository.
+
+**mvn install:**
+
+- **Focus:** Packaging and Installation
+- **Action:** Executes the entire build lifecycle up to the `install` phase, encompassing compilation, packaging (similar to `mvn package`), and verification.
+- **Outcome:** Packaged artifact placed in the `target` directory **and** installed in your local Maven repository, readily accessible for project dependencies.
+- **Suitability:** Perfect for developing libraries or modules intended for integration with other projects within your codebase, ensuring efficient dependency management.
+
+**Key Considerations:**
+
+- **`mvn clean install`:** Combines cleaning the `target` directory (`mvn clean`) with packaging and installation (`mvn install`) for a streamlined workflow.
+- **Custom Goals:** Configure custom goals for fine-grained control over specific build functionalities beyond default behaviors.
+
+By understanding the nuances of `mvn package` and `mvn install`, you can make informed decisions regarding project outputs, streamlining your development process and effectively managing dependencies. Feel free to ask any further questions you may have!
+</div>
