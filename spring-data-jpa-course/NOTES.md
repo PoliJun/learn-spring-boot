@@ -164,3 +164,72 @@ Hibernate:
     alter table student 
        add constraint UK_fe0i52si7ybu0wjedj6motiim unique (email)
 ```
+
+## `@Table` and Constraints
+
+- table name
+- add constraints
+
+```java
+package com.example.demo;
+
+import javax.persistence.*;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
+@Entity(name = "Student")
+@Table(name = "student",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "student_email_unique", columnNames = "email")})
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+public class Student {
+
+    @Id
+    @SequenceGenerator(name = "student_sequence", sequenceName = "student_sequence",
+            allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "student_sequence")
+    @Column(name = "id", updatable = false)
+    Long id;
+
+    @Column(name = "first_name", nullable = false, columnDefinition = "Text")
+    private String firstName;
+
+    @Column(name = "last_name", nullable = false, columnDefinition = "Text")
+    private String lastName;
+
+    @Column(name = "email", nullable = false, columnDefinition = "Text")
+    private String email;
+
+    @Column(name = "age", nullable = false)
+    private Integer age;
+
+}
+```
+
+Remove unique constraint from column definition, add unique constraint at @Table. Then you see you can define the constraint's name.
+
+```terminal
+WARN 27667 --- [           main] o.h.engine.jdbc.spi.SqlExceptionHelper   : sequence "student_sequence" does not exist, skipping
+Hibernate: create sequence student_sequence start 1 increment 1
+Hibernate: 
+    
+    create table student (
+       id int8 not null,
+        age int4 not null,
+        email Text not null,
+        first_name Text not null,
+        last_name Text not null,
+        primary key (id)
+    )
+Hibernate: 
+    
+    alter table student 
+       add constraint student_email_unique unique (email)
+```
+## 

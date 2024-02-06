@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Entity(name = "Student")
+@Table(name = "student",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "student_email_unique", columnNames = "email")})
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,17 +23,17 @@ public class Student {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "student_sequence")
     @Column(name = "id", updatable = false)
     Long id;
-    
+
     @Column(name = "first_name", nullable = false, columnDefinition = "Text")
     private String firstName;
-    
+
     @Column(name = "last_name", nullable = false, columnDefinition = "Text")
     private String lastName;
-    
-    @Column(name = "email", nullable = false, columnDefinition = "Text", unique = true)
+
+    @Column(name = "email", nullable = false, columnDefinition = "Text")
     private String email;
-    
-    @Column(name = "age")
+
+    @Column(name = "age", nullable = false)
     private Integer age;
 
 }
