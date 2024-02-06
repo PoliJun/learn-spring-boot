@@ -57,6 +57,70 @@ public class DemoApplication {
 
 This is Controller
 
+- Get
+- Post
+- Put
+- Delete
+
+### From Bard
+
+<div style="padding: 20px; margin: 5px; border: 1px solid purple">
+In Spring Boot, the API layer forms the core for interacting with your application through various HTTP methods like GET, POST, PUT, and DELETE. Understanding these methods and how to implement them effectively is crucial for building functional and user-friendly applications.
+
+**Understanding the HTTP Methods:**
+
+- **GET:** This method retrieves data from a specific resource identified by the URL. It's typically used to fetch information or list available resources.
+- **POST:** This method creates a new resource on the server based on the data provided in the request body. It's commonly used for submitting forms, adding new entries, or triggering actions.
+- **PUT:** This method updates an existing resource on the server with the data provided in the request body. It's used to modify or replace existing data entirely.
+- **DELETE:** This method removes a specific resource from the server based on the provided URL. Use it with caution as deleted data is generally unrecoverable.
+
+**Implementing API Endpoints in Spring Boot:**
+
+Spring Boot provides several annotations and libraries to simplify building RESTful APIs. Here's a basic overview:
+
+1. **Define your data model:** Create domain classes representing your resources (e.g., User, Product).
+2. **Create controllers:** Use Spring MVC controllers annotated with `@RestController` to define your API endpoints.
+3. **Map methods to HTTP verbs:** Annotate controller methods with `@GetMapping`, `@PostMapping`, `@PutMapping`, or `@DeleteMapping` to specify the supported HTTP method.
+4. **Handle data input and output:** Use request and response objects to access data sent and received by the API. Utilize libraries like Jackson for automatic JSON serialization and deserialization.
+5. **Connect to data store:** Integrate with databases or other persistence mechanisms to store and retrieve your data. Spring Data and JPA offer simplified access to various data sources.
+
+**Examples:**
+
+```java
+// GET all users
+@GetMapping("/users")
+public List<User> getAllUsers() {
+    return userService.findAll();
+}
+
+// POST a new user
+@PostMapping("/users")
+public User createUser(@RequestBody User user) {
+    return userService.save(user);
+}
+
+// PUT an existing user
+@PutMapping("/users/{id}")
+public User updateUser(@PathVariable Long id, @RequestBody User user) {
+    user.setId(id);
+    return userService.save(user);
+}
+
+// DELETE a user
+@DeleteMapping("/users/{id}")
+public void deleteUser(@PathVariable Long id) {
+    userService.deleteById(id);
+}
+```
+
+**Remember:**
+
+- Implement proper error handling and security measures for your API endpoints.
+- Use clear and descriptive URLs for your resources.
+- Document your API with tools like Swagger for better collaboration and usability.
+
+By effectively utilizing Spring Boot's API layer functionalities, you can create robust and scalable web applications that interact seamlessly with your users and other systems. As you progress in your Spring Boot journey, delve deeper into advanced topics like security, exception handling, and performance optimization for a well-rounded understanding of building efficient and secure APIs.
+</div>
 ## Service Layer
 
 ### Constructor dependency injection
@@ -96,8 +160,6 @@ spring.jpa.properties.hibernate.format_sql=true
         private Long id;
     ```
 
-## Quick Word
-
 ### JPA Repositories
 
 `@Repository`
@@ -107,5 +169,50 @@ spring.jpa.properties.hibernate.format_sql=true
 public interface StudentRepository extends JpaRepository<Student, Long> {
 
     
+}
+
+@Service
+@AllArgsConstructor
+public class StudentService {
+    private final StudentRepository studentRepository;
+
+    public List<Student> getStudents() {
+        return studentRepository.findAll();
+    }
+}
+```
+
+### Saving Student
+
+#### CommandLineRunner
+
+```java
+package com.example.demo.student;
+
+import java.time.LocalDate;
+import java.time.Month;
+import java.util.List;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class StudentConfig {
+
+    @Bean
+    CommandLineRunner commandLineRunner(StudentRepository repository) {
+        return args -> {
+            Student mariam = new Student(null, "Mariam", "mariam@example.com",
+                    LocalDate.of(2000, Month.JANUARY, 5), 21);
+            Student alex = new Student(null, "Alex", "alex@example.com",
+                    LocalDate.of(2004, Month.JANUARY, 5), 21);
+            Student delores = new Student(null, "Delores", "delores@example.com",
+                    LocalDate.of(2002, Month.JANUARY, 5), 21);
+
+            repository.saveAll(List.of(mariam, alex, delores));
+
+        };
+
+    }
 }
 ```
