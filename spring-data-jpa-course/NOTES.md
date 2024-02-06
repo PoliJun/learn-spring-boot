@@ -26,3 +26,30 @@
 - item name
 - data type
 ![Entity](image/entity.png)
+
+## Map Entity to Table
+
+**import jakarta/javax related packages, not hibernate**
+
+### `@Entity`
+
+```java
+@Entity(name = "Student")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+public class Student {
+
+    @Id
+    Long id;
+    private String firstName;
+    private String lastName;
+    private String email;
+    private Integer age;
+
+}
+```
+
+`name`: Default is the class name.  
+Sometimes you have a long class but entity name is different. It's good practice to explicitly give the name of the entity.
