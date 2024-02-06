@@ -62,3 +62,9 @@ This is Controller
 ### Constructor dependency injection
 
 Controller communicate with Service through this way
+
+### Dependency Injection
+
+- `@Component`
+- `@Service`
+
