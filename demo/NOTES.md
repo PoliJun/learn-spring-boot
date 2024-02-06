@@ -384,3 +384,28 @@ returns:
     "path": "/api/v1/student"
 }
 ```
+
+## Delete Method
+
+`existsById(id)`
+
+```java
+public void deleteStudent(Long id) {
+        boolean exists = studentRepository.existsById(id);
+        if (!exists) {
+            throw new IllegalStateException("student with id " + id + "does not exist");
+        }
+
+        studentRepository.deleteById(id);
+    }
+```
+
+### `@Query`
+
+```java
+@Query("SELECT u FROM User u WHERE u.status = 1")
+Collection<User> findAllActiveUsers();
+```
+
+[baeldung bolg](https://www.baeldung.com/spring-data-jpa-query)
+
