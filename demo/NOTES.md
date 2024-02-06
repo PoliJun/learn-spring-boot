@@ -222,8 +222,6 @@ public class StudentConfig {
 `jakarta.persistence.Transient`
 Specifies that the property or field is not persistent. It is used to annotate a property or field of an entity class, mapped superclass, or embeddable class.
 
-### Code
-
 ```java
 package com.example.demo.student;
 
@@ -312,3 +310,16 @@ Indexes:
   }
 ]
 ```
+
+## PostMapping
+
+- `@PostMapping`
+- `@RequestBody`
+
+```java
+@PostMapping
+    public void registerNewStudent(@RequestBody Student student) {
+        studentService.addNewStudent(student);
+    }
+```
+
