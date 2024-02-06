@@ -420,3 +420,9 @@ update database
 #### Entity Managed State
 
 [Hibernate Entity Life Cycle](https://nikhilsukhani.medium.com/hibernate-lifecycle-states-in-hibernate-transient-persistent-detached-removed-40ba2f689b07)
+
+## Packaging and Running Applications
+
+- `mvn install`
+- `java -jar demo-0.0.1-SNAPSHOT.jar`  
+- `java -jar demo-0.0.1-SNAPSHOT.jar --server.port 8081`
