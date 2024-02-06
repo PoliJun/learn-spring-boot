@@ -216,3 +216,99 @@ public class StudentConfig {
     }
 }
 ```
+
+## `@Transient`
+
+`jakarta.persistence.Transient`
+Specifies that the property or field is not persistent. It is used to annotate a property or field of an entity class, mapped superclass, or embeddable class.
+
+### Code
+
+```java
+package com.example.demo.student;
+
+import java.time.LocalDate;
+import java.time.Period;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
+@Entity
+@Table
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+public class Student {
+    @Id
+    @SequenceGenerator(name = "student_sequence", sequenceName = "student_sequence",
+            allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "student_sequence")
+    private Long id;
+    private String name;
+    private String email;
+    private LocalDate dob;
+    @Transient
+    private Integer age;
+
+    public Integer getAge() {
+        return Period.between(this.dob, LocalDate.now()).getYears();
+    }
+
+    public Student(String name, String email, LocalDate dob) {
+        this.name = name;
+        this.email = email;
+        this.dob = dob;
+    }
+
+}
+```
+
+`age` is no longer in database, but returned from api.
+
+```terminal
+student=# \d student
+                      Table "public.student"
+ Column |          Type          | Collation | Nullable | Default 
+--------+------------------------+-----------+----------+---------
+ dob    | date                   |           |          | 
+ id     | bigint                 |           | not null | 
+ email  | character varying(255) |           |          | 
+ name   | character varying(255) |           |          | 
+Indexes:
+    "student_pkey" PRIMARY KEY, btree (id)
+```
+
+```json
+[
+  {
+    "id": 1,
+    "name": "Mariam",
+    "email": "mariam@example.com",
+    "dob": "2000-01-05",
+    "age": 24
+  },
+  {
+    "id": 2,
+    "name": "Alex",
+    "email": "alex@example.com",
+    "dob": "2004-01-05",
+    "age": 20
+  },
+  {
+    "id": 3,
+    "name": "Delores",
+    "email": "delores@example.com",
+    "dob": "2002-01-05",
+    "age": 22
+  }
+]
+```
