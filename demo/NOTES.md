@@ -95,3 +95,17 @@ spring.jpa.properties.hibernate.format_sql=true
         @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "student_sequence")
         private Long id;
     ```
+
+## Quick Word
+
+### JPA Repositories
+
+`@Repository`
+
+```java
+@Repository
+public interface StudentRepository extends JpaRepository<Student, Long> {
+
+    
+}
+```
