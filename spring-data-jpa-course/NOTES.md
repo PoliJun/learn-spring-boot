@@ -17,3 +17,12 @@
 
 ![description](image/decription.png)
 
+## ERD
+
+### Entity
+
+- Table name
+- Constraint
+- item name
+- data type
+![Entity](image/entity.png)
