@@ -49,8 +49,8 @@ public class DemoApplication {
 
 ## Student Class
 
--   RESTful api response json to browser automate.
--   toString method in Student class
+- RESTful api response json to browser automate.
+- toString method in Student class
     > lombok: `@toString`
 
 ## API Layer
@@ -70,3 +70,28 @@ Controller communicate with Service through this way
 
 ## Data Access Layer
 
+### application.properties
+
+```properties
+spring.datasource.url=jdbc:postgresql://localhost:5432/student
+spring.datasource.username=
+spring.datasource.password=
+spring.jpa.hibernate.ddl-auto=create-drop
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+spring.jpa.properties.hibernate.format_sql=true
+```
+
+## Entity
+
+- `@Entity`
+- `@Table`
+- Primary key:
+
+    ```java
+    @Id
+        @SequenceGenerator(name = "student_sequence", sequenceName = "student_sequence",
+                allocationSize = 1)
+        @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "student_sequence")
+        private Long id;
+    ```
