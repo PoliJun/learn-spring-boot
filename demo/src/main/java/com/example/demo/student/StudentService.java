@@ -1,6 +1,7 @@
 package com.example.demo.student;
 
 import java.util.List;
+import java.util.Optional;
 import org.springframework.stereotype.Service;
 import lombok.AllArgsConstructor;
 
@@ -15,7 +16,12 @@ public class StudentService {
     }
 
     public void addNewStudent(Student student) {
-        //  studentRepository.save(student);
-        System.out.println("New student"); 
+        Optional<Student> studentOptional =
+                studentRepository.findStudentByEmail(student.getEmail());
+        if (studentOptional.isPresent()) {
+            throw new IllegalStateException("Email already taken");
+        }
+
+        studentRepository.save(student);
     }
 }
