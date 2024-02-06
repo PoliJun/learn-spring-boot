@@ -7,8 +7,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import lombok.AllArgsConstructor;
+import org.springframework.web.bind.annotation.PutMapping;
+
 
 
 @AllArgsConstructor
@@ -34,4 +37,9 @@ public class StudentController {
     public void removeStudent(@PathVariable("StudentId") Long id ){
         studentService.deleteStudent(id);
     }
+
+    @PutMapping("update/{id}")
+    public void updateStudent(@PathVariable Long id, @RequestParam(required = false) String name, @RequestParam(required = false) String email) {
+        studentService.updateStudent(id, name, email);
+    }   
 }

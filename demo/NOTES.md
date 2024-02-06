@@ -409,3 +409,14 @@ Collection<User> findAllActiveUsers();
 
 [baeldung bolg](https://www.baeldung.com/spring-data-jpa-query)
 
+## Put api
+
+update database
+
+### `@Transactional`
+
+**Using this annotation means that you don't have to write any JPQL query.**
+
+#### Entity Managed State
+
+[Hibernate Entity Life Cycle](https://nikhilsukhani.medium.com/hibernate-lifecycle-states-in-hibernate-transient-persistent-detached-removed-40ba2f689b07)
