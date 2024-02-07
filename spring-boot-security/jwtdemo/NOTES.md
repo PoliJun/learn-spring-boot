@@ -268,12 +268,215 @@ define enum type.
 
 ### override `getPassword()`
 
-in `UserDetails`: 
+in `UserDetails`:
+
 ```java
 /**
-	 * Returns the password used to authenticate the user.
-	 * @return the password
-	 */
-	String getPassword();
+  * Returns the password used to authenticate the user.
+  * @return the password
+  */
+ String getPassword();
 ```
+
 In case we have a `password` field, then we used lombok `@AllArgsConstructor`, it didn't auto generate override method. We need to manually override this method.  
+
+### implements `UserDetails`
+
+- Collection<? extends GrantedAuthority> getAuthorities();
+- `String getPassword();`
+- `String getUsername();`
+- `boolean isAccountNonExpired();`
+- `boolean isAccountNonLocked();`
+- `boolean isCredentialsNonExpired();`
+- `boolean isEnabled();`
+
+## Create UserRepository
+
+```java
+package com.example.jwtdemo.user;
+
+import java.util.Optional;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface UserRepository extends JpaRepository<User, Integer> {
+    Optional<User> findByEmail(String email);
+}
+```
+
+## Create JWT Filter
+
+```java
+package com.example.jwtdemo.config;
+
+import java.io.IOException;
+import org.springframework.lang.NonNull;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+// import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+
+@Component
+@RequiredArgsConstructor
+public class JwtAuthenticationFilter extends OncePerRequestFilter {
+    private final UserDetailsService userDetailsService;
+
+    @Override
+    protected void doFilterInternal(
+            @NonNull HttpServletRequest request,
+            @NonNull HttpServletResponse response,
+            @NonNull FilterChain filterChain)
+            throws ServletException, IOException {
+        final String authHeader = request.getHeader("Authorization");
+        final String jwt;
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+        jwt = authHeader.substring(7);
+    }
+
+}
+```
+
+### `extends OncePerRequestFilter`
+
+### implementation
+
+```java
+@Override
+    protected void doFilterInternal(HttpServletRequest request,
+            HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
+        
+    }
+```
+
+Three parameters:
+
+- HttpServletRequest request
+- HttpServletResponse response
+- FilterChain filterChain
+
+### FilterChain pattern
+
+**ChatGPT-3.5:**
+<div style="margin:5px;padding:20px;border:2px solid purple">
+The Filter Chain design pattern is a behavioral pattern that allows multiple filters to process a request or response in a chain-like manner. Each filter in the chain is responsible for a specific aspect of the processing, and the request or response is passed through the chain.
+
+Here is a simple example of the Filter Chain design pattern in Java. In this example, let's consider a scenario where we have a set of filters to process a request:
+
+```java
+// Step 1: Define the Request and Response objects
+class Request {
+    private String data;
+
+    public Request(String data) {
+        this.data = data;
+    }
+
+    public String getData() {
+        return data;
+    }
+}
+
+class Response {
+    private String data;
+
+    public String getData() {
+        return data;
+    }
+
+    public void setData(String data) {
+        this.data = data;
+    }
+}
+
+// Step 2: Define the Filter interface
+interface Filter {
+    void execute(Request request, Response response, FilterChain chain);
+}
+
+// Step 3: Implement concrete filters
+class AuthenticationFilter implements Filter {
+    @Override
+    public void execute(Request request, Response response, FilterChain chain) {
+        System.out.println("Authenticating the request");
+        chain.doFilter(request, response);
+    }
+}
+
+class LoggingFilter implements Filter {
+    @Override
+    public void execute(Request request, Response response, FilterChain chain) {
+        System.out.println("Logging the request");
+        chain.doFilter(request, response);
+        System.out.println("Logging the response");
+    }
+}
+
+class ValidationFilter implements Filter {
+    @Override
+    public void execute(Request request, Response response, FilterChain chain) {
+        System.out.println("Validating the request");
+        chain.doFilter(request, response);
+    }
+}
+
+// Step 4: Define the Filter Chain
+class FilterChain {
+    private List<Filter> filters = new ArrayList<>();
+    private int index = 0;
+
+    public void addFilter(Filter filter) {
+        filters.add(filter);
+    }
+
+    public void doFilter(Request request, Response response) {
+        if (index < filters.size()) {
+            Filter filter = filters.get(index);
+            index++;
+            filter.execute(request, response, this);
+        }
+    }
+}
+
+// Step 5: Use the Filter Chain
+public class Main {
+    public static void main(String[] args) {
+        FilterChain filterChain = new FilterChain();
+        filterChain.addFilter(new AuthenticationFilter());
+        filterChain.addFilter(new LoggingFilter());
+        filterChain.addFilter(new ValidationFilter());
+
+        Request request = new Request("Some data");
+        Response response = new Response();
+
+        filterChain.doFilter(request, response);
+    }
+}
+```
+
+In this example, we have a `Filter` interface with a method `execute`. Concrete filters (`AuthenticationFilter`, `LoggingFilter`, and `ValidationFilter`) implement this interface. The `FilterChain` class is responsible for maintaining the order of filters and executing them one by one.
+
+When you run this example, you'll see the output:
+
+```output
+Authenticating the request
+Logging the request
+Validating the request
+Logging the response
+```
+
+This demonstrates how each filter in the chain processes the request or response, and the control flows through the chain accordingly.
+</div>
+
+Notice: call execute on a filter passed filterChain along with its index as parameter, so the stack will have an end.
+
+### Use Spring @NonNull annotation in spring project
+
+### Use @RequiredConstructor annotation for final fields
