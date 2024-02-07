@@ -217,3 +217,33 @@ public final class DefaultSecurityFilterChain implements SecurityFilterChain {
 
 ![basic auth](image/basic_auth.png)
 The next time, client send request to the server with "username:password" format
+
+## `@EnableWebSecurity`
+
+write your own web security
+
+```java
+package com.example.workshop.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.web.SecurityFilterChain;
+
+import static org.springframework.security.config.Customizer.withDefaults;
+
+@EnableWebSecurity
+public class SecurityConfig {
+    @Bean
+    // @Order(SecurityProperties.BASIC_AUTH_ORDER)
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.authorizeRequests(requests -> requests.anyRequest().authenticated())
+                .httpBasic(withDefaults());
+        return http.build();
+    }
+}
+```
+
+### `@Order(SecurityProperties.BASIC_AUTH_ORDER)`
+
+This is the lowest order.
