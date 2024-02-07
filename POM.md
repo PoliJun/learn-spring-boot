@@ -5,7 +5,7 @@
 Does the parent project version effects the dependencies' version?  
 **ChatGPT-3.5:**
 <div style="margin: 5px; padding: 20px; border: 2px solid orange">
-Yes, in a Maven project, the version specified in the `<parent>` project can influence the versions of dependencies in the child project. When a project inherits from a parent project, it inherits the configuration, properties, and dependencies defined in the parent's POM file.
+Yes, in a Maven project, the version specified in the `parent` project can influence the versions of dependencies in the child project. When a project inherits from a parent project, it inherits the configuration, properties, and dependencies defined in the parent's POM file.
 
 If a dependency version is not explicitly specified in the child project, Maven will look up the dependency in the parent project. If the dependency is defined in the parent project with a specific version, that version will be used in the child project, unless the child project explicitly overrides it.
 
