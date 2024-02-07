@@ -244,6 +244,15 @@ public class SecurityConfig {
 }
 ```
 
+without `http.formLogin();`:  
+
+<img src="image/dialog.png" width=300 height=200/>
+
 ### `@Order(SecurityProperties.BASIC_AUTH_ORDER)`
 
 This is the lowest order.
+
+### Postman Authentication
+
+![postman](image/postmanauth.png)
+### JWT Authentication
