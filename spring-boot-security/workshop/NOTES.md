@@ -255,4 +255,17 @@ This is the lowest order.
 ### Postman Authentication
 
 ![postman](image/postmanauth.png)
+
 ### JWT Authentication
+
+![backendapi](image/jwtbackendapi.png)
+
+### pom.xml dependencies
+
+```xml
+<dependency>
+   <groupId>io.jsonwebtoken</groupId>
+   <artifactId>jjwt</artifactId>
+   <version>0.9.1</version>
+</dependency>
+```
