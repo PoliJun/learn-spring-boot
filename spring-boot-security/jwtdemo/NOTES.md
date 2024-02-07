@@ -3,3 +3,277 @@
 ## Intro
 
 ![intro](image/intro.png)
+
+## User class
+
+```java
+package com.example.jwtdemo.user;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Entity(name = "User")
+@Table(name = "")
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class User {
+    @Id
+    @GeneratedValue
+    private Integer id;
+    private String firstName;
+    private String lastName;
+    private String email;
+    private String password;
+}
+```
+
+### `@Builder` annotation provides builder api  
+
+***Tips: Builder Pattern***
+<div style="margin:5px;padding:20px;border:2px solid purple">
+<b>ChatGPT-3.5:</b><br>
+The builder pattern is a creational design pattern used in object-oriented programming to construct complex objects with a step-by-step approach. It provides a way to construct a product with a variety of configurations while keeping the construction process clean and readable. The builder pattern is particularly useful when an object has a large number of parameters, and it's not practical to have a constructor with an exhaustive list of parameters.
+
+Key components of the builder pattern include:
+
+1. **Product:**
+   - The complex object that we want to build.
+
+2. **Builder:**
+   - An abstract interface or class that declares the steps required to construct the product.
+
+3. **ConcreteBuilder:**
+   - A concrete implementation of the builder interface or class that provides specific implementations for constructing the product.
+
+4. **Director:**
+   - An optional class that orchestrates the construction process using a builder. The director is responsible for defining the construction steps in a specific order.
+
+Here is a simple example of the builder pattern in Java:
+
+```java
+// Product
+class Product {
+    private String part1;
+    private String part2;
+
+    public void setPart1(String part1) {
+        this.part1 = part1;
+    }
+
+    public void setPart2(String part2) {
+        this.part2 = part2;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{part1='" + part1 + "', part2='" + part2 + "'}";
+    }
+}
+
+// Builder
+interface Builder {
+    void buildPart1(String part1);
+
+    void buildPart2(String part2);
+
+    Product getResult();
+}
+
+// ConcreteBuilder
+class ConcreteBuilder implements Builder {
+    private Product product = new Product();
+
+    @Override
+    public void buildPart1(String part1) {
+        product.setPart1(part1);
+    }
+
+    @Override
+    public void buildPart2(String part2) {
+        product.setPart2(part2);
+    }
+
+    @Override
+    public Product getResult() {
+        return product;
+    }
+}
+
+// Director
+class Director {
+    public void construct(Builder builder) {
+        builder.buildPart1("A");
+        builder.buildPart2("B");
+    }
+}
+
+// Client
+public class BuilderPatternExample {
+    public static void main(String[] args) {
+        Director director = new Director();
+        Builder builder = new ConcreteBuilder();
+
+        director.construct(builder);
+        Product product = builder.getResult();
+
+        System.out.println("Constructed Product: " + product);
+    }
+}
+```
+
+In this example, the `Product` class is the object to be constructed. The `Builder` interface declares the steps required to build the product, and `ConcreteBuilder` provides specific implementations for constructing the product. The `Director` class orchestrates the construction process, and the client code demonstrates how to use the builder pattern to create a complex object step by step.
+</div>
+
+### @GeneratedValue: auto strategies choose strategy for you
+
+```yaml
+spring:
+    datasource:
+        url: jdbc:postgresql://localhost:5432/jwt_security
+        username: huntley
+        password:
+        driver-class-name: org.postgresql.Driver
+    jpa:
+        hibernate:
+            ddl-auto: create-drop
+        show-sql: true
+        properties:
+            hibernate:
+                format_sql: true
+                globally_quoted_identifiers: true
+            database: postgresql
+            database-platform: org.hibernate.dialect.postgreSQLDialect
+```
+
+`globally_quoted_identifiers: true`: add quotes for sql identifiers.
+
+**Run:**
+
+```terminal
+WARN 84539 --- [  restartedMain] o.h.engine.jdbc.spi.SqlExceptionHelper   : sequence "user_seq" does not exist, skipping
+Hibernate: create sequence "user_seq" start with 1 increment by 50
+Hibernate: 
+    
+    create table "user" (
+       "id" integer not null,
+        "email" varchar(255),
+        "first_name" varchar(255),
+        "last_name" varchar(255),
+        "password" varchar(255),
+        primary key ("id")
+    )
+```
+
+### Security Generate password
+
+```terminal
+2024-02-08T04:30:18.404+08:00  INFO 84539 --- [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2024-02-08T04:30:18.413+08:00  INFO 84539 --- [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-02-08T04:30:18.480+08:00  WARN 84539 --- [  restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-02-08T04:30:18.901+08:00  WARN 84539 --- [  restartedMain] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: e4355861-9cc4-4c5e-a123-cbbe0528c67b
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2024-02-08T04:30:19.025+08:00  INFO 84539 --- [  restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@3210d546, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@566d853c, org.springframework.security.web.context.SecurityContextHolderFilter@3cc574dd, org.springframework.security.web.header.HeaderWriterFilter@30a8a3df, org.springframework.security.web.csrf.CsrfFilter@570fdf85, org.springframework.security.web.authentication.logout.LogoutFilter@2f4e7489, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@28a40f41, org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter@4a5a9bb8, org.springframework.security.web.authentication.ui.DefaultLogoutPageGeneratingFilter@63ec771, org.springframework.security.web.authentication.www.BasicAuthenticationFilter@77226767, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@3685244c, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@323cf63c, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@244ce887, org.springframework.security.web.access.ExceptionTranslationFilter@4d708624, org.springframework.security.web.access.intercept.AuthorizationFilter@9728039]
+2024-02-08T04:30:19.079+08:00
+```
+
+## Create User class
+
+```java
+package com.example.jwtdemo.user;
+
+import java.util.Collection;
+import java.util.List;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Entity(name = "User")
+@Table(name = "user")
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class User implements UserDetails {
+    @Id
+    @GeneratedValue
+    private Integer id;
+    private String firstName;
+    private String lastName;
+    private String email;
+    private String password;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.name()));
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+}
+```
+
+### UserDetails
+
+In `package org.springframework.security.core.userdetails;`,
+`public interface UserDetails extends Serializable`  
+`public class User implements UserDetails, CredentialsContainer`  
+
+### `@Enumerated(EnumType.STRING)`
+
+define enum type.
+
+### override `getPassword()`
+
+in `UserDetails`: 
+```java
+/**
+	 * Returns the password used to authenticate the user.
+	 * @return the password
+	 */
+	String getPassword();
+```
+In case we have a `password` field, then we used lombok `@AllArgsConstructor`, it didn't auto generate override method. We need to manually override this method.  
