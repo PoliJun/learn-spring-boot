@@ -487,3 +487,27 @@ Notice: call execute on a filter passed filterChain along with its index as para
 
 Make sure the client who sent the request is who he claims who he is.
 
+### parseClaims
+
+```java
+    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+        final Claims claims = extractAllClaims(token);
+        return claimsResolver.apply(claims);
+    }
+
+    public String extractUsername(String token) {
+        return extractClaim(token, Claims::getSubject);
+    }
+
+    private Claims extractAllClaims(String token) {
+        // return Jwts.parserBuilder().setSigningKey(getSignInKey())
+        // .build().parseClaimsJws(token).getBody();
+        return Jwts.parser().verifyWith(getSignInKey()).build().parseSignedClaims(token)
+                .getPayload();
+    }
+
+    private SecretKey getSignInKey() {
+        byte[] keyBytes = Decoders.BASE64.decode(SECRETE_KEY);
+        return Keys.hmacShaKeyFor(keyBytes);
+    }
+```
