@@ -1,6 +1,6 @@
 package com.example.jwtdemo.config;
 
-import java.security.Key;
+import javax.crypto.SecretKey;
 import org.springframework.stereotype.Service;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -18,11 +18,13 @@ public class JwtService {
     }
 
     private Claims extractAllClaims(String token) {
-        return Jwts.parserBuilder().setSigningKey(getSignInKey())
-                .build().parseClaimsJws(token).getBody();
+        // return Jwts.parserBuilder().setSigningKey(getSignInKey())
+        // .build().parseClaimsJws(token).getBody();
+        return Jwts.parser().verifyWith(getSignInKey()).build()
+                .parseSignedClaims(token).getPayload();
     }
 
-    private Key getSignInKey() {
+    private SecretKey getSignInKey() {
         byte[] keyBytes = Decoders.BASE64.decode(SECRETE_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
     }
