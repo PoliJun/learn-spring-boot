@@ -2,14 +2,12 @@ package com.example.jwtdemo.config;
 
 import java.io.IOException;
 import org.springframework.lang.NonNull;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-// import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @Component

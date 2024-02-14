@@ -480,3 +480,10 @@ Notice: call execute on a filter passed filterChain along with its index as para
 ### Use Spring @NonNull annotation in spring project
 
 ### Use @RequiredConstructor annotation for final fields
+
+## JwtService class
+
+### signingKey
+
+Make sure the client who sent the request is who he claims who he is.
+
