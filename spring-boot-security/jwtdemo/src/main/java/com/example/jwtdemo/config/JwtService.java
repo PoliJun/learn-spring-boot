@@ -1,10 +1,15 @@
 package com.example.jwtdemo.config;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 import javax.crypto.SecretKey;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
@@ -13,11 +18,22 @@ import io.jsonwebtoken.security.Keys;
 public class JwtService {
     private static final String SECRETE_KEY = "W6LbuTcwjpbtDlJjLw9XwjdUmh0ztaOM";
 
-    
+
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
+    }
+
+    public String generateToken(UserDetails userDetails) {
+        return generateToken(new HashMap<>(), userDetails);
+    }
+
+    public String generateToken(Map<String, Object> extractClaims, UserDetails userDetails) {
+        return Jwts.builder().claims(extractClaims).subject(userDetails.getUsername())
+                .issuedAt(new Date(System.currentTimeMillis()))
+                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
+                .signWith(getSignInKey(), Jwts.SIG.HS256).compact();
     }
 
     public String extractUsername(String token) {

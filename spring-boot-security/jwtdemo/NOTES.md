@@ -511,3 +511,18 @@ Make sure the client who sent the request is who he claims who he is.
         return Keys.hmacShaKeyFor(keyBytes);
     }
 ```
+
+### Generate Token
+
+```java
+    public String generateToken(UserDetails userDetails) {
+        return generateToken(new HashMap<>(), userDetails);
+    }
+
+    public String generateToken(Map<String, Object> extractClaims, UserDetails userDetails) {
+        return Jwts.builder().claims(extractClaims).subject(userDetails.getUsername())
+                .issuedAt(new Date(System.currentTimeMillis()))
+                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
+                .signWith(getSignInKey(), Jwts.SIG.HS256).compact();
+    }
+```
