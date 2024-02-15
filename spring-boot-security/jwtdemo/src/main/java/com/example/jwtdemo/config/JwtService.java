@@ -1,5 +1,6 @@
 package com.example.jwtdemo.config;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,13 +10,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
 
 @Service
 public class JwtService {
-    private static final String SECRETE_KEY = "78473BD5FC437F2BD15F1399CA4A8";
+    private static final String SECRETE_KEY = "EiBsQufryGHohMTTb5faiGKAIrdy5oht";
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -50,8 +50,8 @@ public class JwtService {
     }
 
     private SecretKey getSignInKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(SECRETE_KEY);
-        return Keys.hmacShaKeyFor(keyBytes);
+        // byte[] keyBytes = Decoders.BASE64.decode(SECRETE_KEY);
+        return Keys.hmacShaKeyFor(SECRETE_KEY.getBytes(StandardCharsets.UTF_8));
     }
 
     private boolean isTokenExpired(String token) {
