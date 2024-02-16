@@ -50,8 +50,8 @@ public class JwtService {
     }
 
     private SecretKey getSignInKey() {
-        // byte[] keyBytes = Decoders.BASE64.decode(SECRETE_KEY);
-        return Keys.hmacShaKeyFor(SECRETE_KEY.getBytes(StandardCharsets.UTF_8));
+        byte[] keyBytes = SECRETE_KEY.getBytes(StandardCharsets.UTF_8);
+        return Keys.hmacShaKeyFor(keyBytes);
     }
 
     private boolean isTokenExpired(String token) {

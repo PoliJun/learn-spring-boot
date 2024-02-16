@@ -4,6 +4,8 @@
 
 ![intro](image/intro.png)
 
+Anytime and each time you create a Filter, just noticed and remember that it would be the first thing to be executed in the application.
+
 ## User class
 
 ```java
@@ -549,6 +551,7 @@ Make sure the client who sent the request is who he claims who he is.
 ```
 
 ### finish Filter
+
 ```java
 package com.example.jwtdemo.config;
 
