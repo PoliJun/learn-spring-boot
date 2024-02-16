@@ -604,3 +604,79 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 }
 ```
+
+## `@EnableWebSecurity`
+
+returns FilterChain in this class.
+
+**ChatGPT-3.5**:
+<div style="margin:5px;padding:20px;border:2px solid purple">
+In Spring Security, `@EnableWebSecurity` is an annotation that is used to enable web security in a Spring Boot application. This annotation is typically applied to a configuration class that extends `WebSecurityConfigurerAdapter` or implements `SecurityConfigurerAdapter`.
+
+Here is a brief introduction to `@EnableWebSecurity` and its usage:
+
+### Purpose of `@EnableWebSecurity`
+
+1. **Enabling Web Security:**
+   - The primary purpose of `@EnableWebSecurity` is to enable Spring Security for a web-based application.
+
+2. **Configuration Class:**
+   - This annotation is usually placed on a class annotated with `@Configuration`. The class typically extends `WebSecurityConfigurerAdapter` to provide custom security configurations.
+
+### Example Usage
+
+Here's an example of using `@EnableWebSecurity` in a Spring Boot application:
+
+```java
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    // Custom security configurations can be added here
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        // Configure HTTP security
+        http
+            .authorizeRequests()
+                .antMatchers("/public/**").permitAll()
+                .anyRequest().authenticated()
+                .and()
+            .formLogin()
+                .loginPage("/login")
+                .permitAll()
+                .and()
+            .logout()
+                .permitAll();
+    }
+}
+```
+
+In this example:
+
+- The `@EnableWebSecurity` annotation is used to enable Spring Security for the application.
+- The `SecurityConfig` class extends `WebSecurityConfigurerAdapter`, which allows you to customize the security configuration.
+- The `configure(HttpSecurity http)` method is overridden to provide specific security configurations, such as defining which URLs are protected, configuring form login, and specifying logout behavior.
+
+### Important Considerations
+
+1. **Customization:**
+   - You can customize the security configuration by overriding methods in `WebSecurityConfigurerAdapter`. Common methods to override include `configure(HttpSecurity http)`, `configure(AuthenticationManagerBuilder auth)`, and others.
+
+2. **Order of Execution:**
+   - The order of execution of the security filters is significant. Filters are applied in the order they are declared. If you have multiple `WebSecurityConfigurerAdapter` instances, make sure to control the order of their execution.
+
+3. **Path Matching:**
+   - Pay attention to path matching patterns in `antMatchers` or other configuration methods. The order of these patterns can affect the behavior of security rules.
+
+4. **Annotations vs. XML Configuration:**
+   - `@EnableWebSecurity` is part of the Java-based configuration approach provided by Spring Security. If you prefer XML-based configuration, you can use the XML configuration equivalent.
+
+Overall, `@EnableWebSecurity` is a key annotation when working with Spring Security in a Spring Boot web application. It marks the configuration class responsible for setting up security features and allows for the customization of security rules.
+</div>
