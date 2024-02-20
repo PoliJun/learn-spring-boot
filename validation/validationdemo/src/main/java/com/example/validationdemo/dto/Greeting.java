@@ -7,15 +7,15 @@ import lombok.Data;
 @Data
 public class Greeting {
 
-    @NotNull
-    @NotEmpty
+    @NotNull(message = "Message cannot be null")
+    @NotEmpty(message = "Message cannot be empty")
     private String msg;
-    
-    @NotNull
-    @NotEmpty
+
+    @NotNull(message = "From cannot be null")
+    @NotEmpty(message = "From cannot be empty")
     private String from;
-    
-    @NotNull
-    @NotEmpty
+
+    @NotNull(message = "To cannot be null")
+    @NotEmpty(message = "To cannot be empty")
     private String to;
 }

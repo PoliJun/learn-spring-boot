@@ -21,10 +21,8 @@ public class GreetingController {
     private final GreetingService greetingService;
 
     @PostMapping
-    public ResponseEntity<String> greet(@RequestBody @Valid Greeting greeting
-            ) {
-        
-        return ResponseEntity
-                .ok(greetingService.greet(greeting.getMsg(), greeting.getFrom(), greeting.getTo()));
+    public ResponseEntity<String> greet(@RequestBody Greeting greeting) {
+
+        return ResponseEntity.accepted().body(greetingService.greet(greeting));
     }
 }

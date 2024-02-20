@@ -1,12 +1,25 @@
 package com.example.validationdemo.service;
 
+import java.util.Set;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
+import com.example.validationdemo.dto.Greeting;
+import com.example.validationdemo.validator.ObjectValidator;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class GreetingService {
-    
-    
-    public String greet(String from, String to, String msg) {
-        return String.format("Hello %s, %s says %s", to, from, msg);
+    private final ObjectValidator<Greeting> objectValidator;
+
+    public String greet(Greeting greeting) {
+        var violations = objectValidator.validate(greeting);
+        if (!violations.isEmpty()) {
+            return String.join(" \n| ",
+                    violations.stream().map(Object::toString).collect(Collectors.toSet()));
+        }
+        return String.format("Hello %s, %s says %s", greeting.getMsg(), greeting.getFrom(),
+                greeting.getTo());
     }
 }

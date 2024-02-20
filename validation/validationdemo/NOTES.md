@@ -8,3 +8,6 @@
 
 ## BindingResult
 
+## Generic
+
+Declare ObjectValidator Generic.
