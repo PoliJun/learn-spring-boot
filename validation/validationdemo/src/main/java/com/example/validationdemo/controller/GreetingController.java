@@ -1,6 +1,10 @@
 package com.example.validationdemo.controller;
 
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +21,13 @@ public class GreetingController {
     private final GreetingService greetingService;
 
     @PostMapping
-    public ResponseEntity<String> greet(@RequestBody @Valid Greeting greeting) {
-        return ResponseEntity.ok(greetingService.greet(greeting.getMsg(), greeting.getFrom(), greeting.getTo()));
+    public ResponseEntity<String> greet(@RequestBody @Valid Greeting greeting,
+            BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body(bindingResult.getAllErrors().stream()
+                    .map(ObjectError::getDefaultMessage).collect(Collectors.joining()));
+        }
+        return ResponseEntity
+                .ok(greetingService.greet(greeting.getMsg(), greeting.getFrom(), greeting.getTo()));
     }
 }
