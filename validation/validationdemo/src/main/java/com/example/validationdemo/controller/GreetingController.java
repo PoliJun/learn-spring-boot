@@ -21,12 +21,9 @@ public class GreetingController {
     private final GreetingService greetingService;
 
     @PostMapping
-    public ResponseEntity<String> greet(@RequestBody @Valid Greeting greeting,
-            BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return ResponseEntity.badRequest().body(bindingResult.getAllErrors().stream()
-                    .map(ObjectError::getDefaultMessage).collect(Collectors.joining()));
-        }
+    public ResponseEntity<String> greet(@RequestBody @Valid Greeting greeting
+            ) {
+        
         return ResponseEntity
                 .ok(greetingService.greet(greeting.getMsg(), greeting.getFrom(), greeting.getTo()));
     }
